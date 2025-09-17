@@ -105,6 +105,7 @@ Swagger UI : http://localhost:8080
 ### ⚠️ Note importante : le projet intègre CORS pour que Swagger UI (port 8080) puisse appeler l’API (port 5000).
 
 ### 📂 Structure du projet
+
 ```json
 dernier-metro/
 ├── Dockerfile.v1
