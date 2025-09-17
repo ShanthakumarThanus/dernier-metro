@@ -1,18 +1,15 @@
-FROM node:18-alpine
+FROM node:20-alpine
 
 WORKDIR /app
 
-# Installe uniquement les deps de prod
-COPY package*.json ./
-RUN npm ci --omit=dev
+COPY package.json .
 
-# Copie le code
-COPY server.js ./
+RUN npm install
 
-# Fuseau horaire Europe/Paris (utile pour tes heures)
-RUN apk add --no-cache tzdata \
- && cp /usr/share/zoneinfo/Europe/Paris /etc/localtime \
- && echo "Europe/Paris" > /etc/timezone
+COPY server.js .
 
-EXPOSE 3000
+ENV PORT=5000
+
+EXPOSE 5000
+
 CMD ["node", "server.js"]

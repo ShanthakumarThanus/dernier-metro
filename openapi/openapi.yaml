@@ -1,0 +1,98 @@
+openapi: 3.0.3
+info:
+  title: Dernier Métro API
+  version: "1.0.0"
+  description: >
+    Mini API Express qui simule l'arrivée de la prochaine rame et indique si c'est la dernière.
+servers:
+  - url: http://localhost:5000
+
+paths:
+  /health:
+    get:
+      summary: Health check
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: ok
+
+  /next-metro:
+    get:
+      summary: Prochain passage de métro
+      parameters:
+        - in: query
+          name: station
+          schema:
+            type: string
+          required: true
+          description: Nom de la station (ex. Chatelet)
+      responses:
+        "200":
+          description: Réponse OK (service ouvert ou fermé)
+          content:
+            application/json:
+              oneOf:
+                - description: Service ouvert
+                  schema:
+                    type: object
+                    required: [station, line, headwayMin, nextArrival, isLast, tz]
+                    properties:
+                      station:
+                        type: string
+                        example: Chatelet
+                      line:
+                        type: string
+                        example: M7
+                      headwayMin:
+                        type: integer
+                        example: 3
+                      nextArrival:
+                        type: string
+                        description: Heure HH:MM Europe/Paris
+                        example: "23:58"
+                      isLast:
+                        type: boolean
+                        example: false
+                      tz:
+                        type: string
+                        example: Europe/Paris
+                - description: Service fermé
+                  schema:
+                    type: object
+                    required: [service, tz]
+                    properties:
+                      service:
+                        type: string
+                        example: closed
+                      tz:
+                        type: string
+                        example: Europe/Paris
+        "400":
+          description: Paramètre manquant (station)
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [error]
+                properties:
+                  error:
+                    type: string
+                    example: missing station
+        "404":
+          description: Route inconnue
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [error]
+                properties:
+                  error:
+                    type: string
+                    example: route not found
