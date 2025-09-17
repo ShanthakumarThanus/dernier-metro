@@ -4,6 +4,9 @@ const express = require("express");
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+const cors = require("cors");   // <— importer le module cors
+app.use(cors());
+
 //Logs par requête
 app.use((req, res, next) => {
     const start = process.hrtime.bigint();
